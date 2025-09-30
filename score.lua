@@ -15,7 +15,11 @@ end
 
 function score:log()
     self.score = math.floor(self.score)
-    self.sessionHighest = self.score
+    if self.score >= self.sessionHighest then
+        self.sessionHighest = self.score
+    else
+        return
+    end
 end
 
 function score:reset()
