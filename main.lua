@@ -12,9 +12,8 @@ math.randomseed(os.time())
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 -- Game variables
-local localScore = 0
-local localScoreWobble = 0
-local localScoreScaleFactor = 2
+local scoreWobble = 0
+local scoreScaleFactor = 2
 local gameDiff
 
 local screenShake = false
@@ -31,13 +30,13 @@ function love.load()
 end
 
 function resetGame()
+    score:reset()
     time:reset()
-    localScore = 0
 end
 
 lastState = ""
 function love.update(dt)
-    -- localScore needs to be seperate or find a way to alternatively reset localScore
+    -- score needs to be seperate or find a way to alternatively reset score
     local state = gamestate.state
     if lastState ~= state then
         if state == "menu" then
@@ -46,7 +45,7 @@ function love.update(dt)
     end
 
     -- Screenshare Stuff
-    if localScore % 500 == 0 then
+    if score.score % 500 == 0 then
         screenShake = true
     end
 
@@ -54,22 +53,21 @@ function love.update(dt)
         menu.update()
     elseif gamestate.state == "ingame" then
         time:increment()
-        localScore = time.time
         inGame.update(dt)
 
         --Super redundant
-        score:set(localScore)
+        --score:set(score)
     end
 
     -- Screenshake timer for explosion and milestone
     if screenShake then
         t = t + dt
-        localScoreWobble = localScoreWobble + 0.1 * dt
-        localScoreScaleFactor = localScoreScaleFactor + 0.02
+        scoreWobble = scoreWobble + 0.1 * dt
+        scoreScaleFactor = scoreScaleFactor + 0.02
         if t >= shakeDuration then
             screenShake = false
-            localScoreWobble = 0
-            localScoreScaleFactor = 2
+            scoreWobble = 0
+            scoreScaleFactor = 2
             t = 0
         end
     end
@@ -88,7 +86,7 @@ function love.draw()
             love.graphics.translate(dx, dy)
         end
         inGame.draw()
-        love.graphics.print(localScore, 20, 20, localScoreWobble, localScoreScaleFactor, localScoreScaleFactor)
+        love.graphics.print(score.score, 20, 20, scoreWobble, scoreScaleFactor, scoreScaleFactor)
 
     elseif gamestate.state == "dead" then
         gameover.draw()
