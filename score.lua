@@ -1,5 +1,3 @@
---Unused for now
-
 score = {}
 
 score.score = 0
@@ -26,7 +24,6 @@ function score:reset()
     self.score = 0 
 end
 
---Only used to print the score at the end, and sessionHighest does nothing
 function score:set(amount)
     self.score = amount
 end
