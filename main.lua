@@ -1,3 +1,4 @@
+local tick = require("tick")
 require("lib")
 require("time")
 require("gamestates/gamestate")
@@ -25,7 +26,8 @@ local t, shakeDuration, magnitude = 0, 0.7, 5
 -- create gamestate reader accessable to all scripts or make it local somehow (harder)
 -- remove all player and enemy* logic from main (DONE)
 
-function love.load()    
+function love.load()  
+    tick.framerate = 60
     gamestate.load()
     love.audio.setVolume(0.2)
 end
@@ -118,4 +120,5 @@ function love.keypressed(key)
             gamestate.changeState("menu")
         end
     end
+
 end
