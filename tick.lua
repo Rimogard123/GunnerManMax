@@ -26,7 +26,6 @@ love.run = function()
   while true do
     tick.dt = timer.step() * tick.timescale
     tick.accum = tick.accum + tick.dt
-    print(timer.step, tick.dt, tick.accum)
     while tick.accum >= tick.rate do
       tick.accum = tick.accum - tick.rate
 

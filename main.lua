@@ -7,7 +7,6 @@ require("gamestates/ingame")
 require("entity/projectiles")
 require("gamestates/menu")
 require("score")
---require("config/diffconfig")
 require("sfx/soundtrack")
 
 math.randomseed(os.time())
@@ -24,9 +23,7 @@ local screenShake = false
 local t, shakeDuration, magnitude = 0, 0.7, 5
 
 --===-- TODO
--- recreate death animation
 -- create gamestate reader accessable to all scripts or make it local somehow (harder)
--- remove all player and enemy* logic from main (DONE)
 
 function love.load()
     tick.framerate = 60 
@@ -41,7 +38,6 @@ end
 
 lastState = ""
 function love.update(dt)
-    -- score needs to be seperate or find a way to alternatively reset score
     local state = gamestate.state
     if lastState ~= state then
         if state == "menu" then
@@ -60,9 +56,6 @@ function love.update(dt)
         time:increment()
         inGame.update(dt)
         projectiles:update(dt)
-
-        --Super redundant
-        --score:set(score)
     end
 
     -- Screenshake timer for explosion and milestone

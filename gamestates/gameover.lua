@@ -6,7 +6,7 @@ require("time")
 gameover = {}
 
 function gameover.load()
-
+    score:log()
 end
 
 function gameover.update()

@@ -36,6 +36,10 @@ function enemy:draw(rot)
     love.graphics.draw(self.gfx, self.x, self.y, math.sin(rot), self.scaling, self.scaling, self.gfxX, self.gfxY)
 end
 
+function enemy:deathAnim()
+	love.graphics.draw(self.gfx, self.x, self.y, math.rad(self.rot), self.scaling, self.scaling, self.gfxX, self.gfxY)
+end
+
 function enemy:move(dt, targetX, targetY)
 	self.lifetime = self.lifetime - 1
 	if self.lifetime <= 0 then return true end
@@ -65,4 +69,5 @@ end
 
 function enemy:addToEndScreen()
 	table.insert(deadEnemies, self)
+	--print(self)
 end

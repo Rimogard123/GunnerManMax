@@ -1,5 +1,3 @@
---Unused for now
-
 score = {}
 
 score.score = 0
@@ -15,10 +13,8 @@ end
 
 function score:log()
     self.score = math.floor(self.score)
-    if self.score >= self.sessionHighest then
+    if self.score > self.sessionHighest then
         self.sessionHighest = self.score
-    else
-        return
     end
 end
 

@@ -18,6 +18,8 @@ local playerGfx = love.graphics.newImage("gfx/player.png")
 local enemyGfx = love.graphics.newImage("gfx/enemy.png")
 local spawningenemies = false
 local playerObj = nil
+local maxDeathDuration = 90
+local deathDuration = maxDeathDuration
 
 function inGame.load()
     print("Config after load:")
@@ -33,7 +35,7 @@ function inGame.update(dt)
     -- Mouse follow
     --print(config["maxEnemies"])
 
-    if time.time % 15 == 0 then
+    if time.time % 15 == 0 and not killed then
         player:shoot(bulletGfx, playerObj.x, playerObj.y, math.random(15, 30), 0.5, 0)
     end
 
@@ -64,10 +66,10 @@ function inGame.update(dt)
             end
             if enemy:handleEnemyDeath(mouseX, mouseY, playerObj.hitboxRadius) then
                 print("killed")
-                score:log()
-                enemies = {}
+                --enemies = {}
                 spawningenemies = false
-                gamestate.changeState("dead")
+                -- gameover.load()
+                -- gamestate.changeState("dead")
                 soundtrack.stop()
                 for _, enemy in pairs(enemies) do
                     enemy:addToEndScreen()
@@ -77,13 +79,32 @@ function inGame.update(dt)
             --print(playerObj.x, playerObj.y, enemy:handleEnemyDeath(playerObj.x, playerObj.y, playerObj.gfxX*2, enemy.gfxX*2))
         end
     end
-
-    score:increment()
+    --LOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL
+    if not killed then
+        score:increment()
+    end
+    if killed then
+        deathDuration = deathDuration - 1
+        if deathDuration <= 0 then
+            gameover.load()
+            gamestate.changeState("dead")
+            enemies = {}
+            killed = false
+            deathDuration = max
+        end
+    end
 end
 
 function inGame.draw()
-    playerObj:draw()
-    for _, enemy in ipairs(enemies) do
-        enemy:draw()
+    if not killed then
+        playerObj:draw()
+        for _, enemy in ipairs(enemies) do
+            enemy:draw()
+        end
+    else
+        for _, enemy in ipairs(enemies) do
+            enemy.rot = enemy.rot + 3
+            enemy:deathAnim()
+        end
     end
 end
