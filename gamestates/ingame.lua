@@ -34,9 +34,27 @@ function inGame.update(dt)
     --print(diffConfig.config["lifetime"])
     -- Mouse follow
     --print(config["maxEnemies"])
-
-    if time.time % 15 == 0 and not killed then
-        player:shoot(bulletGfx, playerObj.x, playerObj.y, math.random(15, 30), 0.5, 0)
+    if time.time % 250 == 0 then
+        diffConfig.config.maxEnemies = diffConfig.config.maxEnemies + 1
+    end
+    if time.time % playerObj.shootDelay == 0 and not killed then
+        local difX, difY
+        local closest = math.huge
+        local targetX, targetY
+        for _, enemy in pairs(enemies) do
+            difX = playerObj.x - enemy.x
+            difY = playerObj.y - enemy.y
+            local dist = math.sqrt(difX * difX + difY * difY)
+            if dist < closest then
+                closest = dist
+                targetX = enemy.x
+                targetY = enemy.y
+            end
+        end
+        if targetX then
+            print(targetX, targetY)
+            player:shoot(bulletGfx, playerObj.x, playerObj.y, targetX, targetY, math.random(15, 30), 10, 0)
+        end
     end
 
     local mouseX, mouseY = love.mouse.getPosition()
@@ -52,7 +70,7 @@ function inGame.update(dt)
             print("Spawning with:", diffConfig.config["baseLerp"], diffConfig.config["lifetime"])
             table.insert(enemies, enemy:new(
                 math.random(1, windowX), math.random(1, windowY),
-                targetX, targetY,
+                playerObj.x, playerObj.y,
                 nil, nil,
                 enemyGfx,
                 diffConfig.config["baseLerp"],
@@ -66,10 +84,7 @@ function inGame.update(dt)
             end
             if enemy:handleEnemyDeath(mouseX, mouseY, playerObj.hitboxRadius) then
                 print("killed")
-                --enemies = {}
                 spawningenemies = false
-                -- gameover.load()
-                -- gamestate.changeState("dead")
                 soundtrack.stop()
                 for _, enemy in pairs(enemies) do
                     enemy:addToEndScreen()
@@ -90,7 +105,7 @@ function inGame.update(dt)
             gamestate.changeState("dead")
             enemies = {}
             killed = false
-            deathDuration = max
+            deathDuration = maxDeathDuration
         end
     end
 end

@@ -28,7 +28,7 @@ local t, shakeDuration, magnitude = 0, 0.7, 5
 function love.load()
     tick.framerate = 60 
     gamestate.load()
-    love.audio.setVolume(0.2)
+    love.audio.setVolume(0.05)
 end
 
 function resetGame()

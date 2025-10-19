@@ -1,3 +1,8 @@
+-- 1.21111: Megabonk Update
+-Built upon projectile class and firing mechanic
+    TODO; Additional projectiles and projectile parameters
+-Fixed enemies spawning directly on the player
+
 -- 1.1:
 -Re-implemented enemy death animation,
 

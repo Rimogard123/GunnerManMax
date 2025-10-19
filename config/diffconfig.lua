@@ -15,7 +15,7 @@ diffConfig.diffs = {
     },
     ["hard"] = {
         baseLerp = 0.075,
-        maxEnemies = 5,
+        maxEnemies = 6,
         lifetime = 80
     }
 }

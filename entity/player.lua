@@ -13,7 +13,9 @@ function player:new(x, y, gfx)
 		gfx = gfx or love.graphics.newImage("gfx/player.png"),
 		gfxX = gfx:getWidth()/2,
         gfxY = gfx:getHeight()/2,
-		hitboxRadius = gfx:getWidth()
+		hitboxRadius = gfx:getWidth(),
+		shootDelay = 4, --frames
+		shootCount = 3
 	}
 	setmetatable(obj, player)
 	return obj
@@ -23,8 +25,8 @@ end
 -- 	self.x = lerp(self.x, targetX, t)
 -- end
 
-function player:shoot(gfx, x, y, lifetime, speed, rot)
-	projectiles:new(gfx, x, y, lifetime, speed, rot)
+function player:shoot(gfx, x, y, targetX, targetY, lifetime, speed, rot)
+	projectiles:new(gfx, x, y, targetX, targetY, lifetime, speed, rot)
 end
 
 function player:draw()
