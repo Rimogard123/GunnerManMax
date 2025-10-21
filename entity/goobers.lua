@@ -1,4 +1,5 @@
-require("lib")
+require("lib/lib")
+camera = require("lib/camera")
 require("time")
 
 enemy = {}
@@ -54,9 +55,9 @@ function enemy:move(dt, targetX, targetY)
 end
 
 function enemy:handleEnemyDeath(playerX, playerY, hitboxRadius)
-    local dx = playerX - self.x
-    local dy = playerY - self.y
-    local distanceSq = dx * dx + dy * dy
+    local distX = playerX - self.x
+    local distY = playerY - self.y
+    local distanceSq = distX * distX + distY * distY
     local radiusSum = hitboxRadius + self.hitboxRadius
 
     return distanceSq <= radiusSum * radiusSum

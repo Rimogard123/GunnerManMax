@@ -9,12 +9,12 @@ function projectiles:new(gfx, x, y, targetX, targetY, lifetime, speed, rot)
     local dy = math.sin(angle) * speed
     local obj = {
         gfx = gfx,
-        x = x or 100,
-        y = y or 100,
+        x = x or 500,
+        y = y or 500,
         dx = dx,
         dy = dy,
         lifetime = lifetime or 30,
-        speed = speed or 1,
+        speed = speed or 2,
         rot = angle or 0
     }
     setmetatable(obj, projectiles)
@@ -45,6 +45,7 @@ function projectiles:move()
 end
 
 function projectiles:draw()
+    --love.graphics.rectangle("line")
     if self.active[1] then
         for _, proj in pairs(self.active) do
             love.graphics.draw(proj.gfx, proj.x, proj.y, proj.rot)

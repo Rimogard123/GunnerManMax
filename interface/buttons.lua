@@ -16,16 +16,19 @@ buttons = {
             diffConfig.setConfig("hard")
             soundtrack.changeTrack("sfx/hard.ogg")
         end}
-    }
+    },
+    selected = "medium",
+    selectedOffset = {0.32, 0.3, 0.28}
 }
 
 function buttons.checkClickArea(x, y, button)
     if button == 1 then
-        for _, btn in pairs(buttons.diffs) do
+        for k, btn in pairs(buttons.diffs) do
             if x >= btn.x and x <= btn.x + btn.width
             and y >= btn.y and y <= btn.y + btn.height then
                 if btn.onClick then btn.onClick() end
                 --print(diffConfig.config["maxEnemies"])
+                buttons.selected = k
                 return true
             end
         end
@@ -43,14 +46,21 @@ function buttons.update(dt)
 end
 
 function buttons.draw()
-    for _, btn in pairs(buttons.diffs) do
+    for k, btn in pairs(buttons.diffs) do
         -- Button rectangle
-        love.graphics.setColor(btn.c[1], btn.c[2], btn.c[3]) -- button color
+        local r, g, b = btn.c[1], btn.c[2], btn.c[3]
+        if buttons.selected == k then
+            r = r - buttons.selectedOffset[1]
+            g = g - buttons.selectedOffset[2]
+            b = b - buttons.selectedOffset[3]
+        end
+        love.graphics.setColor(r, g, b)
         love.graphics.rectangle("fill", btn.x, btn.y, btn.width, btn.height, 10, 10)
         
         -- Button text
         love.graphics.setColor(1, 1, 1)
-        local font = love.graphics.getFont()
+        local font = love.graphics.newFont(26)
+        love.graphics.setFont(font)
         local textWidth = font:getWidth(btn.text)
         local textHeight = font:getHeight(btn.text)
         love.graphics.print(btn.text, btn.x + (btn.width - textWidth) / 2, btn.y + (btn.height - textHeight) / 2)

@@ -1,3 +1,12 @@
+-- 2.0xd1: Gunnerman Max (The sequel)
+-Didn't improve code clarity
+    No defined globals and improper use of imports
+-New gfx courtesy of damiona123@ https://github.com/damiona123/Gunner-Man
+-Use of wasd for player controls
+-New Infinite terrain generation tm
+-Increased overall difficulty and enemies increase on time alive
+-Darkened 6 pixels on Player sprite
+
 -- 1.21111: Megabonk Update
 -Built upon projectile class and firing mechanic
     TODO; Additional projectiles and projectile parameters

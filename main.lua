@@ -1,10 +1,10 @@
 local tick = require("tick")
-require("lib")
 require("time")
 require("gamestates/gamestate")
 require("gamestates/gameover")
 require("gamestates/ingame")
 require("entity/projectiles")
+require("config/diffconfig")
 require("gamestates/menu")
 require("score")
 require("sfx/soundtrack")
@@ -13,7 +13,9 @@ math.randomseed(os.time())
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 -- Game variables
+local menubg = love.graphics.newImage("gfx/gunnermanmm.png")
 local bg = love.graphics.newImage("gfx/bg.png")
+local deadbg = love.graphics.newImage("gfx/youdied.png")
 
 local scoreWobble = 0
 local scoreScaleFactor = 2
@@ -32,6 +34,7 @@ function love.load()
 end
 
 function resetGame()
+    diffConfig.load()
     score:reset()
     time:reset()
 end
@@ -76,6 +79,7 @@ end
 
 function love.draw()
     if gamestate.state == "menu" then
+        love.graphics.draw(menubg)
         menu.draw()
 
     elseif gamestate.state == "ingame" then
@@ -86,11 +90,13 @@ function love.draw()
             love.graphics.translate(dx, dy)
         end
 
-        projectiles:draw()
         inGame.draw()
+        local font = love.graphics.newFont(20)
+        love.graphics.setFont(font)
         love.graphics.print(score.score, 20, 20, scoreWobble, scoreScaleFactor, scoreScaleFactor)
 
     elseif gamestate.state == "dead" then
+        love.graphics.draw(deadbg)
         gameover.draw()
     end
 end
