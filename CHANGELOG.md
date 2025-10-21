@@ -1,3 +1,6 @@
+-- 2.11:
+-Added arrow key movement
+
 -- 2.1: Fun patch
 -Made it loads more fun
 -other unnoteworthy tweaks

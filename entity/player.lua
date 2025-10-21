@@ -37,10 +37,10 @@ end
 
 function player:move()
 	local dx, dy = 0, 0
-	if love.keyboard.isDown("w") then dy = dy - 1 end
-	if love.keyboard.isDown("s") then dy = dy + 1 end
-	if love.keyboard.isDown("a") then dx = dx - 1 end
-	if love.keyboard.isDown("d") then dx = dx + 1 end
+	if love.keyboard.isDown("w") or love.keyboard.isDown("up") then dy = dy - 1 end
+	if love.keyboard.isDown("s") or love.keyboard.isDown("down") then dy = dy + 1 end
+	if love.keyboard.isDown("a") or love.keyboard.isDown("left") then dx = dx - 1 end
+	if love.keyboard.isDown("d") or love.keyboard.isDown("right") then dx = dx + 1 end
 	if dx ~= 0 and dy ~= 0 then
 		dx = dx * 0.7071
 		dy = dy * 0.7071
