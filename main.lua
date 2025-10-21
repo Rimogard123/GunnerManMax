@@ -30,11 +30,11 @@ local t, shakeDuration, magnitude = 0, 0.7, 5
 function love.load()
     tick.framerate = 60 
     gamestate.load()
-    love.audio.setVolume(0.05)
+    love.audio.setVolume(0.12)
 end
 
 function resetGame()
-    diffConfig.load()
+    diffConfig.setConfig(diffConfig.selected)
     score:reset()
     time:reset()
 end

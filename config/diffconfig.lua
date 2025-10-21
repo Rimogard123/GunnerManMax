@@ -1,5 +1,7 @@
 diffConfig = {}
 
+diffConfig.selected = ""
+
 diffConfig.config = {}
 
 diffConfig.diffs = {
@@ -27,6 +29,7 @@ diffConfig.values = {
 
 diffConfig.setConfig = function(diff)
     diff = diff or "medium"
+    diffConfig.selected = diff
     for k, v in pairs(diffConfig.diffs[diff]) do
         diffConfig.config[k] = v
         print(diffConfig.config[k], v)
