@@ -21,6 +21,9 @@ local spawningenemies = false
 local playerObj = nil
 local maxDeathDuration = 90
 local deathDuration = maxDeathDuration
+local afkTimer = 450
+local afkRadius = 1350
+local afkPoint
 
 
 function inGame.load()
@@ -29,6 +32,7 @@ function inGame.load()
         print(k, v)
     end
     playerObj = player:new(10, 10, playerGfx)
+    afkPoint = {playerObj.x, playerObj.y}
     return diffConfig.config["diff"]
 end
 
@@ -37,6 +41,13 @@ function inGame.update(dt)
 
     if time.time % 250 == 0 then
         diffConfig.config.maxEnemies = diffConfig.config.maxEnemies + 1
+    end
+    if time.time % afkTimer == 0 then
+        if distance(playerObj.x, playerObj.y, afkPoint[1], afkPoint[2]) <= afkRadius then
+            soundtrack.stop()
+            killed = true
+        end
+        afkPoint = {playerObj.x, playerObj.y}
     end
     if time.time % playerObj.shootDelay == 0 and not killed then
         local difX, difY
@@ -60,7 +71,9 @@ function inGame.update(dt)
     local mouseX, mouseY = love.mouse.getPosition()
     -- playerObj.x = mouseX
     -- playerObj.y = mouseY
-    playerObj:move()
+    if not killed then
+        playerObj:move()
+    end
 
     -- Spawn enemies
     if time.time == 60 then spawningenemies = true end
@@ -86,12 +99,10 @@ function inGame.update(dt)
                 score:add(math.ceil(enemy.baseLerp*10))
             end
             if enemy:handleEnemyDeath(playerObj.x, playerObj.y, playerObj.hitboxRadius) then
-                print("killed")
-                spawningenemies = false
-                soundtrack.stop()
                 for _, enemy in pairs(enemies) do
                     enemy:addToEndScreen()
                 end
+                soundtrack.stop()
                 killed = true
             end
             --print(playerObj.x, playerObj.y, enemy:handleEnemyDeath(playerObj.x, playerObj.y, playerObj.gfxX*2, enemy.gfxX*2))
@@ -104,6 +115,7 @@ function inGame.update(dt)
     if killed then
         deathDuration = deathDuration - 1
         if deathDuration <= 0 then
+            spawningenemies = false
             gameover.load()
             gamestate.changeState("dead")
             enemies = {}
@@ -116,8 +128,24 @@ function inGame.update(dt)
 end
 
 function inGame.draw()
+    local font
     if not killed then
         cam:attach()
+        love.graphics.setColor(0.8, 0.3, 0.3, 0.15)
+        love.graphics.circle("fill", afkPoint[1], afkPoint[2], afkRadius)
+        love.graphics.setColor(1, 0.6, 0.6, 0.75)
+        love.graphics.circle("line", afkPoint[1], afkPoint[2], afkRadius)
+        love.graphics.setColor(1,1,1,1)
+        local sampletext = love.graphics.getFont()
+        local offsetX = sampletext:getWidth("You will die within the Circle")
+        local offsetY = sampletext:getHeight("You will die within the Circle")
+        font = love.graphics.newFont(32)
+        love.graphics.setColor(0.8, 0.2, 0.2, 0.75)
+        love.graphics.setFont(font)
+        if distance(playerObj.x, playerObj.y, afkPoint[1], afkPoint[2]) <= afkRadius then
+            love.graphics.print("              !WARNING!\nYou will die within the Circle", afkPoint[1] - offsetX, afkPoint[2] - offsetY)
+        end
+        love.graphics.setColor(1,1,1,1)
         projectiles:draw()
         --love.graphics.rectangle("line", playerObj.x, playerObj.y, 30, 30)
         --love.graphics.rectangle("line",playerWorldPosX, playerWorldPosY, 30, 30)

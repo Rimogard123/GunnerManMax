@@ -1,3 +1,7 @@
+-- 2.1: Fun patch
+-Made it loads more fun
+-other unnoteworthy tweaks
+
 -- 2.0xd1: Gunnerman Max (The sequel)
 -Didn't improve code clarity
     No defined globals and improper use of imports
