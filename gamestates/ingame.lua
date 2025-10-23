@@ -65,8 +65,9 @@ function inGame.update(dt)
             end
         end
         if targetX then
-            player:shoot(bulletGfx, playerObj.x, playerObj.y, targetX, targetY, math.random(30, 90), 15, 0)
+            player:shoot("standard", playerObj.x, playerObj.y, targetX, targetY, math.random(30, 90), 15, 0)
         end
+        projectiles:update(dt,playerObj)
     end
 
     --local mouseX, mouseY = love.mouse.getPosition()
