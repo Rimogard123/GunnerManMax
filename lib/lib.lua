@@ -1,21 +1,21 @@
+local lib = {}
 
-
-function distance(x1, y1, x2, y2)
+lib.distance = function(x1, y1, x2, y2)
     local dx = x2 - x1
     local dy = y2 - y1
     return math.sqrt(dx * dx + dy * dy)
 end
 
-function lerp(A, B, t)
+lib.lerp = function(A, B, t)
 	return A + (B - A) * t
 end
 
-function randomFloat(min, max, precision)
+lib.randomFloat = function(min, max, precision)
     local scale = 10 ^ precision
     return math.floor((min + math.random() * (max - min)) * scale + 0.5) / scale
 end
 
-function clamp(value, min, max)
+lib.clamp = function(value, min, max)
     if value > max then
         return max
     elseif value < min then
@@ -25,7 +25,7 @@ function clamp(value, min, max)
     end
 end
 
-function sine(input, amplitude, frequency, phase)
+lib.sine = function(input, amplitude, frequency, phase)
 	-- input: could be time, x, or y (whatever you're basing motion on)
 	-- amplitude: how "tall" the wave is (max distance from the center)
 	-- frequency: how "fast" the wave cycles (higher = more waves in same space/time)
@@ -41,3 +41,4 @@ function sine(input, amplitude, frequency, phase)
 	return math.sin(angle) * amplitude
 end
 
+return lib

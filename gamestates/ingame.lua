@@ -1,5 +1,5 @@
 require("time")
-require("lib/lib")
+local lib = require("lib/lib")
 require("gamestates/gamestate")
 require("config/diffconfig")
 require("entity/projectiles")
@@ -9,6 +9,7 @@ require("entity/goobers")
 require("entity/player")
 local camera = require("lib/camera")
 local cam = camera()
+local bg = love.graphics.newImage("gfx/bg.png")
 
 inGame = {}
 enemies = {}
@@ -21,7 +22,7 @@ local spawningenemies = false
 local playerObj = nil
 local maxDeathDuration = 90
 local deathDuration = maxDeathDuration
-local afkTimer = 450
+local afkTimer = 210
 local afkRadius = 1350
 local afkPoint
 
@@ -40,10 +41,10 @@ function inGame.update(dt)
     --print("player x/y: "..playerObj.x, playerObj.y)
 
     if time.time % 250 == 0 then
-        diffConfig.config.maxEnemies = diffConfig.config.maxEnemies + 1
+        diffConfig.config.maxEnemies = diffConfig.config.maxEnemies * 1.2
     end
     if time.time % afkTimer == 0 then
-        if distance(playerObj.x, playerObj.y, afkPoint[1], afkPoint[2]) <= afkRadius then
+        if lib.distance(playerObj.x, playerObj.y, afkPoint[1], afkPoint[2]) <= afkRadius then
             soundtrack.stop()
             killed = true
         end
@@ -64,13 +65,12 @@ function inGame.update(dt)
             end
         end
         if targetX then
-            player:shoot(bulletGfx, playerObj.x, playerObj.y, targetX, targetY, math.random(15, 30), 10, 0)
+            player:shoot(bulletGfx, playerObj.x, playerObj.y, targetX, targetY, math.random(30, 90), 15, 0)
         end
     end
 
-    local mouseX, mouseY = love.mouse.getPosition()
-    -- playerObj.x = mouseX
-    -- playerObj.y = mouseY
+    --local mouseX, mouseY = love.mouse.getPosition()
+
     if not killed then
         playerObj:move()
     end
@@ -79,9 +79,7 @@ function inGame.update(dt)
     if time.time == 60 then spawningenemies = true end
 
     if spawningenemies then
-        --print(config["maxEnemies"])
         if #enemies < diffConfig.config["maxEnemies"] then
-            --print("Spawning with:", diffConfig.config["baseLerp"], diffConfig.config["lifetime"])
 
             table.insert(enemies, enemy:new(
                 math.random(1, windowX), math.random(1, windowY),
@@ -96,7 +94,7 @@ function inGame.update(dt)
             local targetX, targetY = playerObj.x, playerObj.y
             if enemy:move(dt, targetX, targetY) then
                 table.remove(enemies, k)
-                score:add(math.ceil(enemy.baseLerp*10))
+                score:add(enemy.pointsValue)
             end
             if enemy:handleEnemyDeath(playerObj.x, playerObj.y, playerObj.hitboxRadius) then
                 for _, enemy in pairs(enemies) do
@@ -105,12 +103,7 @@ function inGame.update(dt)
                 soundtrack.stop()
                 killed = true
             end
-            --print(playerObj.x, playerObj.y, enemy:handleEnemyDeath(playerObj.x, playerObj.y, playerObj.gfxX*2, enemy.gfxX*2))
         end
-    end
-    --LOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL
-    if not killed then
-        score:increment()
     end
     if killed then
         deathDuration = deathDuration - 1
@@ -123,13 +116,13 @@ function inGame.update(dt)
             deathDuration = maxDeathDuration
         end
     end
-    cam:lookAt(lerp(cam.x, playerObj.x, 0.3), lerp(cam.y, playerObj.y, 0.2))
-    --cam:lookAt(100,100)
+    cam:lookAt(lib.lerp(cam.x, playerObj.x, 0.2), lib.lerp(cam.y, playerObj.y, 0.1))
 end
 
 function inGame.draw()
     local font
     if not killed then
+        love.graphics.draw(bg, 0, 0, 0, 3, 2)
         cam:attach()
         love.graphics.setColor(0.8, 0.3, 0.3, 0.15)
         love.graphics.circle("fill", afkPoint[1], afkPoint[2], afkRadius)
@@ -142,7 +135,7 @@ function inGame.draw()
         font = love.graphics.newFont(32)
         love.graphics.setColor(0.8, 0.2, 0.2, 0.75)
         love.graphics.setFont(font)
-        if distance(playerObj.x, playerObj.y, afkPoint[1], afkPoint[2]) <= afkRadius then
+        if lib.distance(playerObj.x, playerObj.y, afkPoint[1], afkPoint[2]) <= afkRadius then
             love.graphics.print("              !WARNING!\nYou will die within the Circle", afkPoint[1] - offsetX, afkPoint[2] - offsetY)
         end
         love.graphics.setColor(1,1,1,1)
@@ -155,6 +148,7 @@ function inGame.draw()
         end
         cam:detach()
     else
+        love.graphics.draw(bg, 0, 0, 0, 3, 2)
         cam:attach()
         for _, enemy in ipairs(enemies) do
             enemy.rot = enemy.rot + 3

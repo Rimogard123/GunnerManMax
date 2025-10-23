@@ -1,4 +1,3 @@
-require("lib/lib")
 require("time")
 require("config/diffconfig")
 require("entity/projectiles")
@@ -31,10 +30,6 @@ function player:new(x, y, gfx)
 	return obj
 end
 
--- function player:moveX(start, targetX, t)
--- 	self.x = lerp(self.x, targetX, t)
--- end
-
 function player:move()
 	local dx, dy = 0, 0
 	if love.keyboard.isDown("w") or love.keyboard.isDown("up") then dy = dy - 1 end
@@ -50,11 +45,9 @@ function player:move()
 end
 
 function player:shoot(gfx, x, y, targetX, targetY, lifetime, speed, rot)
-	print("projectile start: "..x, y)
 	projectiles:new(gfx, x, y, targetX, targetY, lifetime, speed, rot)
 end
 
 function player:draw()
-	print(self.x, self.y)
 	love.graphics.draw(self.gfx, self.x, self.y, 0, 2, 2, self.gfxX, self.gfxY)
 end

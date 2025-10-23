@@ -1,5 +1,7 @@
 -- 2.11:
 -Added arrow key movement
+-Added 2(two) new enemies
+-Once again didn't improve code clarity
 
 -- 2.1: Fun patch
 -Made it loads more fun

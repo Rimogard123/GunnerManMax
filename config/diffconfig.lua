@@ -38,6 +38,6 @@ diffConfig.setConfig = function(diff)
     print(diffConfig.config["diff"])
 end
 
-function diffConfig.load()
+diffConfig.load = function()
     diffConfig.setConfig()
 end

@@ -14,7 +14,6 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 
 -- Game variables
 local menubg = love.graphics.newImage("gfx/gunnermanmm.png")
-local bg = love.graphics.newImage("gfx/bg.png")
 local deadbg = love.graphics.newImage("gfx/youdied.png")
 
 local scoreWobble = 0
@@ -49,7 +48,7 @@ function love.update(dt)
     end
 
     -- Screenshare Stuff
-    if score.score % 500 == 0 then
+    if score.score % 500 == 0 and score.score ~= 0 then
         screenShake = true
     end
 
@@ -83,7 +82,6 @@ function love.draw()
         menu.draw()
 
     elseif gamestate.state == "ingame" then
-        love.graphics.draw(bg, 0, 0, 0, 3, 2)
         if screenShake then
             local dx = math.random(-magnitude, magnitude)
             local dy = math.random(-magnitude, magnitude)

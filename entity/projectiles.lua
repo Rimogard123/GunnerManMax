@@ -32,6 +32,7 @@ function projectiles:update(dt)
         for e, enemy in pairs(enemies) do
             if enemy:handleEnemyDeath(proj.x, proj.y, 4) then
                 proj.lifetime = 0
+                score:add(enemy.pointsValue)
                 table.remove(enemies, e)
                 break
             end
